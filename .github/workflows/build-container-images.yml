@@ -1,0 +1,21 @@
+name: Build container images
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Launch container-builder in hcloud
+        env:
+          DD_DOCKERIO_USER: ${{ secrets.DOCKERIO_USER }}
+          DD_DOCKERIO_PASSWORD: ${{ secrets.DOCKERIO_PASSWORD }}
+          DD_GHCRIO_USER: ${{ secrets.GHCRIO_USER }}
+          DD_GHCRIO_PASSWORD: ${{ secrets.GHCRIO_PASSWORD }}
+          DD_SSH_ADMIN_KEY_NAME: ${{ secrets.SSH_ADMIN_KEY_NAME }}
+          DD_HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+          DD_HCLOUD_SERVER_TYPE: ${{ vars.HCLOUD_SERVER_TYPE }}
+        run: ./tools/hcloud-build-images.sh
