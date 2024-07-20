@@ -18,4 +18,6 @@ jobs:
           DD_SSH_ADMIN_KEY_NAME: ${{ secrets.SSH_ADMIN_KEY_NAME }}
           DD_HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
           DD_HCLOUD_SERVER_TYPE: ${{ vars.HCLOUD_SERVER_TYPE }}
+          DD_HCLOUD_SERVER_LOCATION: ${{ vars.HCLOUD_SERVER_LOCATION }}
+          DD_HCLOUD_SERVER_IMAGE: ${{ vars.HCLOUD_SERVER_IMAGE }}
         run: ./tools/hcloud-build-images.sh

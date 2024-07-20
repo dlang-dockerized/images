@@ -11,9 +11,6 @@
 #==================================
 set -e
 
-# OS image
-serverImage='debian-12'
-
 # Check whether container-registry credentials have been provided.
 if [ -z $DD_DOCKERIO_USER ] ; then
 	echo 'Error: $DD_DOCKERIO_USER is not set.'
@@ -58,6 +55,26 @@ if [ -z $DD_HCLOUD_SERVER_TYPE ] ; then
 fi
 serverType="${DD_HCLOUD_SERVER_TYPE}"
 
+# Check whether a location for the cloud-server has been provided.
+if [ -z $DD_HCLOUD_SERVER_LOCATION ] ; then
+	echo 'Error: $DD_HCLOUD_SERVER_LOCATION is not set.'
+	table=$(hcloud location list)
+	echo 'See the following table for available options:'
+	echo "${table}"
+	exit 1
+fi
+serverLocation="${DD_HCLOUD_SERVER_LOCATION}"
+
+# Check whether an OS image name has been provided.
+if [ -z $DD_HCLOUD_SERVER_IMAGE ] ; then
+	echo 'Error: $DD_HCLOUD_SERVER_IMAGE is not set.'
+	table=$(hcloud image list)
+	echo 'See the following table for available options:'
+	echo "${table}"
+	exit 1
+fi
+serverImage="${DD_HCLOUD_SERVER_IMAGE}"
+
 # Generate servername.
 serverName=$(date --utc +%Y%m%d-%H%M%S-%N)
 
@@ -86,6 +103,7 @@ hcloud ssh-key create \
 hcloud server create \
 	--name="${serverName}" \
 	--type="${serverType}" \
+	--location="${serverLocation}" \
 	--image="${serverImage}" \
 	--ssh-key="${sshKeyName}" \
 	--ssh-key="${sshAdminKeyName}" \
