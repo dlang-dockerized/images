@@ -150,6 +150,6 @@ echo "#!/bin/sh
 		-T 'cat > ~/build-dlang-dockerized-images.sh'
 
 hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
-	'screen -d -m bash --init-file "~/batch-dlang-dockerized.sh"'
+	'screen -d -m bash --init-file "~/build-dlang-dockerized-images.sh"'
 
 exit 0
