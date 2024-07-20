@@ -130,7 +130,7 @@ hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 # SSH: Upload build-script.
 echo "#!/bin/sh
 	sh -exc \"
-		git clone 'https://github.com/dlang-dockerized/packaging' dlang-dockerized
+		git clone 'https://github.com/dlang-dockerized/packaging.git' dlang-dockerized
 		cd dlang-dockerized
 		./ddct generate-all
 		./ddct build-selection
