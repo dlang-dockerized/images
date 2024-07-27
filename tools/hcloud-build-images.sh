@@ -90,7 +90,6 @@ sshPublicKey=$(
 	ssh-keygen -y -q \
 		-f "${sshKeyFile}"
 )
-echo "Public Key: ${sshPublicKey}"
 
 # Upload SSH public-key to cloud.
 sshKeyName="${serverName}_ssh"
