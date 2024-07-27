@@ -141,7 +141,7 @@ echo '#!/bin/sh'"
 		CONTAINER_NAMESPACE='ghcr.io/dlang-dockerized/images' ./ddct namespace-publish
 
 		export HCLOUD_TOKEN='${HCLOUD_TOKEN}'
-		hcloud delete '${serverName}'
+		hcloud server delete '${serverName}'
 	\"
 " | \
 	hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
