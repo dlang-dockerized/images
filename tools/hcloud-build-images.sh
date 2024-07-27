@@ -105,9 +105,7 @@ hcloud server create \
 	--location="${serverLocation}" \
 	--image="${serverImage}" \
 	--ssh-key="${sshKeyName}" \
-	--ssh-key="${sshAdminKeyName}" \
-	--primary-ipv6 \
-	--primary-ipv4
+	--ssh-key="${sshAdminKeyName}"
 
 # Delete SSH public-key from cloud.
 hcloud ssh-key delete "${sshKeyName}"
