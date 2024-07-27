@@ -6,9 +6,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install hcloud-cli
       - name: Launch container-builder in hcloud
         env:
           DD_DOCKERIO_USER: ${{ secrets.DOCKERIO_USER }}
