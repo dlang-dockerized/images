@@ -125,7 +125,7 @@ hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 	'
 
 # SSH: Upload build-script.
-echo "#!/bin/sh
+echo '#!/bin/sh'"
 	sh -exc \"
 		git clone 'https://github.com/dlang-dockerized/packaging.git' dlang-dockerized
 		cd dlang-dockerized
@@ -142,7 +142,8 @@ echo "#!/bin/sh
 
 		export HCLOUD_TOKEN='${HCLOUD_TOKEN}'
 		hcloud delete '${serverName}'
-\"" | \
+	\"
+" | \
 	hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 		-T 'cat > ~/build-dlang-dockerized-images.sh'
 
