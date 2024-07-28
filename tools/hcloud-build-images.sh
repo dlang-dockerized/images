@@ -163,6 +163,7 @@ if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 		apt-get update
 		apt-get -y dist-upgrade
 		apt-get -y install \
+			apparmor \
 			containerd \
 			docker.io \
 			git \
