@@ -177,6 +177,7 @@ then
 fi
 
 # SSH: Upload build-script.
+echo "Uploading build-script..."
 if ! echo '#!/bin/sh'"
 	sh -exc \"
 		git clone 'https://github.com/dlang-dockerized/packaging.git' dlang-dockerized
@@ -204,6 +205,7 @@ then
 	exit 1
 fi
 
+echo "Launching screen session with image-builder on cloud-server..."
 if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 	'screen -d -m bash --init-file "~/build-dlang-dockerized-images.sh"'
 then
