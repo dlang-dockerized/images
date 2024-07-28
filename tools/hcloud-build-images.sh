@@ -121,7 +121,7 @@ cloudConfigFile="./cloud-config_${serverName}.yaml"
 echo '#cloud-config'"
 ssh_deletekeys: true
 ssh_keys:
-  ed25519_private: \"${sshHostPrivateKey}\\n\"
+  ed25519_private: \"${sshHostPrivateKey}\\\\n\"
   ed25519_public: \"${sshHostPublicKey}\"
 runcmd:
   - sed -i 's!#HostKey /etc/ssh/ssh_host_ed25519_key!HostKey /etc/ssh/ssh_host_ed25519_key!' '/etc/ssh/sshd_config'
