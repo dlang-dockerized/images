@@ -106,18 +106,22 @@ ssh-keygen -q \
 	-P '' \
 	-C ''
 
-# Read SSH host public-key.
+# Read SSH host keys.
 sshHostPublicKey=$(
 	ssh-keygen -y -q \
 		-f "${sshHostKeyFile}"
 )
+sshHostPrivateKey=$(
+	sed ':a;N;$!ba;s/\n/\\\\n/g' \
+		"${sshHostKeyFile}"
+)
 
 # Generate cloud-init config.
-cloudConfigFile="./cloud-config.yaml"
-echo "#cloud-config
+cloudConfigFile="./cloud-config_${serverName}.yaml"
+echo '#cloud-config'"
 ssh_deletekeys: true
 ssh_keys:
-  ed25519_private: \"$(sed ':a;N;$!ba;s/\n/\\n/g' "${sshHostKeyFile}")\"
+  ed25519_private: \"${sshHostPrivateKey}\\n\"
   ed25519_public: \"${sshHostPublicKey}\"
 " > "${cloudConfigFile}"
 
@@ -137,12 +141,17 @@ hcloud ssh-key delete "${sshKeyName}"
 # Register SSH host key as a known one.
 serverIpAddress=$(hcloud server ip "${serverName}")
 mkdir -p ~/.ssh
-echo "${serverIpAddress} ssh-ed25519 ${sshHostPublicKey}" \
+echo "${serverIpAddress} ${sshHostPublicKey}" \
 	>> ~/.ssh/known_hosts
 
 # Wait a while so the cloud-server and its SSH server
 # are hopefully up and running.
-sleep 30
+sleepingTime=15
+sleep "${sleepingTime}"
+while ! nc -z "${serverIpAddress}" 22; do
+	echo "Cloud-server not reachable via SSH yet; will retry in ${sleepingTime}s."
+	sleep "${sleepingTime}"
+done
 
 # Setup the created cloud-server.
 if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
@@ -159,7 +168,7 @@ if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 			screen
 	'
 then
-	echo "Error: Failed to install dependencies on the cloud server."
+	echo "Error: Failed to install dependencies on cloud-server."
 	hcloud server delete "${serverName}"
 	exit 1
 fi
