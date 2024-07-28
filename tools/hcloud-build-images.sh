@@ -98,6 +98,29 @@ hcloud ssh-key create \
 	--public-key="${sshPublicKey}" \
 	--label 'generator=dlang-dockerized__tools__hcloud-build-images.sh'
 
+# Generate a new SSH host key.
+sshHostKeyFile="./ssh-host-${serverName}_ed25519"
+ssh-keygen -q \
+	-t ed25519 \
+	-f "${sshHostKeyFile}" \
+	-P '' \
+	-C ''
+
+# Read SSH host public-key.
+sshHostPublicKey=$(
+	ssh-keygen -y -q \
+		-f "${sshHostKeyFile}"
+)
+
+# Generate cloud-init config.
+cloudConfigFile="./cloud-config.yaml"
+echo "#cloud-config
+ssh_deletekeys: true
+ssh_keys:
+  ed25519_private: \"$(sed ':a;N;$!ba;s/\n/\\n/g' "${sshHostKeyFile}")\"
+  ed25519_public: \"${sshHostPublicKey}\"
+" > "${cloudConfigFile}"
+
 # Create a new cloud-server.
 hcloud server create \
 	--name="${serverName}" \
@@ -105,14 +128,26 @@ hcloud server create \
 	--location="${serverLocation}" \
 	--image="${serverImage}" \
 	--ssh-key="${sshKeyName}" \
-	--ssh-key="${sshAdminKeyName}"
+	--ssh-key="${sshAdminKeyName}" \
+	--user-data-from-file="${cloudConfigFile}"
 
 # Delete SSH public-key from cloud.
 hcloud ssh-key delete "${sshKeyName}"
 
+# Register SSH host key as a known one.
+serverIpAddress=$(hcloud server ip "${serverName}")
+mkdir -p ~/.ssh
+echo "${serverIpAddress} ssh-ed25519 ${sshHostPublicKey}" \
+	>> ~/.ssh/known_hosts
+
+# Wait a while so the cloud-server and its SSH server
+# are hopefully up and running.
+sleep 30
+
 # Setup the created cloud-server.
-hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
+if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 	sh -ec '
+		export DEBIAN_FRONTEND=noninteractive
 		apt-get update
 		apt-get -y dist-upgrade
 		apt-get -y install \
@@ -123,9 +158,14 @@ hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 			php-cli \
 			screen
 	'
+then
+	echo "Error: Failed to install dependencies on the cloud server."
+	hcloud server delete "${serverName}"
+	exit 1
+fi
 
 # SSH: Upload build-script.
-echo '#!/bin/sh'"
+if ! echo '#!/bin/sh'"
 	sh -exc \"
 		git clone 'https://github.com/dlang-dockerized/packaging.git' dlang-dockerized
 		cd dlang-dockerized
@@ -146,8 +186,18 @@ echo '#!/bin/sh'"
 " | \
 	hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 		-T 'cat > ~/build-dlang-dockerized-images.sh'
+then
+	echo "Error: Failed to upload build-script."
+	hcloud server delete "${serverName}"
+	exit 1
+fi
 
-hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
+if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 	'screen -d -m bash --init-file "~/build-dlang-dockerized-images.sh"'
+then
+	echo "Error: Failed to start image-builder screen session."
+	hcloud server delete "${serverName}"
+	exit 1
+fi
 
 exit 0
