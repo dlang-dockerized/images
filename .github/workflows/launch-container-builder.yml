@@ -1,4 +1,4 @@
-name: Build container images
+name: Launch container builder
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -13,7 +13,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y install hcloud-cli
-      - name: Launch container-builder in hcloud
+      - name: Launch container builder in hcloud
         env:
           DD_DOCKERIO_USER: ${{ secrets.DOCKERIO_USER }}
           DD_DOCKERIO_PASSWORD: ${{ secrets.DOCKERIO_PASSWORD }}
