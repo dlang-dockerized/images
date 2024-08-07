@@ -186,13 +186,13 @@ if ! echo '#!/bin/sh'"
 		./ddct generate-all
 		./ddct build-selection
 		./ddct namespace-copy 'dlangdockerized' #docker.io (no prefix)
-		./ddct namespace-copy 'ghcr.io/dlang-dockerized/images'
+		./ddct namespace-copy 'ghcr.io/dlang-dockerized'
 
 		docker login docker.io -u '${DD_DOCKERIO_USER}' -p '${DD_DOCKERIO_PASSWORD}'
 		CONTAINER_NAMESPACE='dlangdockerized' ./ddct namespace-publish
 
 		docker login ghcr.io -u '${DD_GHCRIO_USER}' -p '${DD_GHCRIO_PASSWORD}'
-		CONTAINER_NAMESPACE='ghcr.io/dlang-dockerized/images' ./ddct namespace-publish
+		CONTAINER_NAMESPACE='ghcr.io/dlang-dockerized' ./ddct namespace-publish
 
 		export HCLOUD_TOKEN='${HCLOUD_TOKEN}'
 		hcloud server delete '${serverName}'
