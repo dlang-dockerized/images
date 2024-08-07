@@ -191,7 +191,7 @@ if ! echo '#!/bin/sh'"
 		docker login docker.io -u '${DD_DOCKERIO_USER}' -p '${DD_DOCKERIO_PASSWORD}'
 		CONTAINER_NAMESPACE='dlangdockerized' ./ddct namespace-publish
 
-		docker login ghcr.io '${DD_GHCRIO_USER}' -p '${DD_GHCRIO_PASSWORD}'
+		docker login ghcr.io -u '${DD_GHCRIO_USER}' -p '${DD_GHCRIO_PASSWORD}'
 		CONTAINER_NAMESPACE='ghcr.io/dlang-dockerized/images' ./ddct namespace-publish
 
 		export HCLOUD_TOKEN='${HCLOUD_TOKEN}'
