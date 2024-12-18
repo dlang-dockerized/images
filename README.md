@@ -2,6 +2,13 @@
 
 Container images with compilers and tools for the D Programming Language.
 
+
+> [!IMPORTANT]
+> We publish our images on the following container registries:
+> 
+> - **docker.io**: <https://hub.docker.com/u/dlangdockerized>
+> - **ghcr.io**: <https://github.com/orgs/dlang-dockerized/packages>
+
 ## Further information
 
 See <https://github.com/dlang-dockerized/containerfiles> for containerfiles
