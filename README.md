@@ -28,7 +28,7 @@ information. Upstream projects often support only their latest release.
 
 ## Downstream policy
 
-The dlang-dockerized project itends to packages applications as released by
+The dlang-dockerized project intends to packages applications as released by
 their respective maintainers, thus we do not backport bugfixes.
 We explicitly reserve the option to include and apply compatibility patches.
 
