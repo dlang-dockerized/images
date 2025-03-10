@@ -184,7 +184,7 @@ if ! echo '#!/bin/sh'"
 		git clone 'https://github.com/dlang-dockerized/packaging.git' dlang-dockerized
 		cd dlang-dockerized
 		./ddct generate-all
-		./ddct build-selection
+		AUTO_PRUNE_IMAGES='on' ./ddct build-selection
 		./ddct namespace-copy 'dlangdockerized' #docker.io (no prefix)
 		./ddct namespace-copy 'ghcr.io/dlang-dockerized'
 
