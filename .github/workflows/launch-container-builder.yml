@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  Launch container builder in hcloud:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
