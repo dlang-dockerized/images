@@ -166,6 +166,7 @@ if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
 		apt-get -y install \
 			apparmor \
 			containerd \
+			docker-cli \
 			docker.io \
 			git \
 			hcloud-cli \
