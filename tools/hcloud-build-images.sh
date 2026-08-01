@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 
 ##                        ##
@@ -159,7 +159,8 @@ done
 
 # Setup the created cloud-server.
 if ! hcloud server ssh "${serverName}" -i "${sshKeyFile}" \
-	sh -ec '
+	sh -ec \
+	'
 		export DEBIAN_FRONTEND=noninteractive
 		apt-get update
 		apt-get -y dist-upgrade
