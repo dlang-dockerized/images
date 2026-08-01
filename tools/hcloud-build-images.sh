@@ -146,7 +146,13 @@ serverIpAddress=$(hcloud server ip "${serverName}")
 mkdir -p ~/.ssh
 echo "${serverIpAddress} ${sshHostPublicKey}" \
 	>> ~/.ssh/known_hosts
-echo "Public Key of server ${serverName}: ${sshHostPublicKey}"
+
+# Calculate and display fingerprint
+sshHostPublicKeyFingerprint=$(
+	ssh-keygen -l -q \
+		-f "${sshKeyFile}"
+)
+echo "Public Key of server ${serverName}: ${sshHostPublicKeyFingerprint}"
 
 # Wait a while so the cloud-server and its SSH server
 # are hopefully up and running.
