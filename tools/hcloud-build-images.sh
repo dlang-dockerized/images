@@ -150,7 +150,7 @@ echo "${serverIpAddress} ${sshHostPublicKey}" \
 # Calculate and display fingerprint
 sshHostPublicKeyFingerprint=$(
 	ssh-keygen -l -q \
-		-f "${sshKeyFile}"
+		-f "${sshHostKeyFile}"
 )
 echo "Public Key of server ${serverName}: ${sshHostPublicKeyFingerprint}"
 
