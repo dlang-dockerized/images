@@ -9,6 +9,14 @@ Container images with compilers and tools for the D Programming Language.
 > - **docker.io**: <https://hub.docker.com/u/dlangdockerized>
 > - **ghcr.io**: <https://github.com/orgs/dlang-dockerized/packages>
 
+> [!NOTE]
+> Our maintenance policy can be found at
+> <https://github.com/dlang-dockerized/packaging/blob/main/MAINTENANCE.md>.
+
+## Usage guide
+
+See <https://dlang.org/oci.html>.
+
 ## Further information
 
 See <https://github.com/dlang-dockerized/containerfiles> for containerfiles
